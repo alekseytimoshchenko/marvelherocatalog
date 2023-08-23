@@ -20,6 +20,7 @@ import com.krokosha.marvelhero.ui.theme.MarvelHeroTheme
 import com.krokosha.marvelhero.view.CharactersBottomNav
 import com.krokosha.marvelhero.view.CollectionScreen
 import com.krokosha.marvelhero.view.LibraryScreen
+import dagger.hilt.android.AndroidEntryPoint
 
 sealed class Destination(val route: String) {
     object Library : Destination("library")
@@ -29,6 +30,7 @@ sealed class Destination(val route: String) {
     }
 }
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

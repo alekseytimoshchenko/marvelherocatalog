@@ -10,3 +10,8 @@ Technologies
 Application
 1) NavHost and Scaffolding
 2) BottomNavBar
+
+Retrofit & Hilt
+1) API communication service
+2) Application and manifest configuration
+3) Hilt implementation
