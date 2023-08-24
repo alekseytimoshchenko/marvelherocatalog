@@ -1,7 +1,9 @@
 package com.krokosha.marvelhero.viewmodel
 
+import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.krokosha.marvelhero.model.CharacterResult
 import com.krokosha.marvelhero.model.CharactersApiResponse
 import com.krokosha.marvelhero.model.api.NetworkResult
 import com.krokosha.marvelhero.repos.MarvelApiRepo
@@ -24,6 +26,7 @@ class LibraryApiViewModel @Inject constructor(
     val characters: StateFlow<NetworkResult<CharactersApiResponse>> = repo.characters
     val queryText = MutableStateFlow("")
     private val queryInput = Channel<String>(Channel.CONFLATED)
+    val characterDetails: MutableState<CharacterResult?> = repo.characterDetails
 
     init { retrieveCharacters() }
 
@@ -43,4 +46,6 @@ class LibraryApiViewModel @Inject constructor(
         queryText.value = input
         queryInput.trySend(input)
     }
+
+    fun retrieveCharacterBy(id: Int) = repo.getCharacterBy(id = id)
 }

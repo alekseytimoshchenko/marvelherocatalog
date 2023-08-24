@@ -1,5 +1,7 @@
 package com.krokosha.marvelhero.repos
 
+import androidx.compose.runtime.mutableStateOf
+import com.krokosha.marvelhero.model.CharacterResult
 import com.krokosha.marvelhero.model.CharactersApiResponse
 import com.krokosha.marvelhero.model.api.MarvelApi
 import com.krokosha.marvelhero.model.api.NetworkResult
@@ -13,6 +15,7 @@ import retrofit2.http.Query
 class MarvelApiRepo(private val api: MarvelApi) {
     private val _characters = MutableStateFlow<NetworkResult<CharactersApiResponse>>(NetworkResult.Initial())
     val characters: StateFlow<NetworkResult<CharactersApiResponse>> = _characters
+    val characterDetails = mutableStateOf<CharacterResult?>(null)
 
     fun query(query: String) {
         _characters.value = NetworkResult.Loading()
@@ -35,5 +38,13 @@ class MarvelApiRepo(private val api: MarvelApi) {
                     }
                 }
             })
+    }
+
+    fun getCharacterBy(id: Int?) {
+        id?.let {
+            characterDetails.value = characters.value.data?.data?.results?.firstOrNull {character ->
+                character.id == id
+            }
+        }
     }
 }
