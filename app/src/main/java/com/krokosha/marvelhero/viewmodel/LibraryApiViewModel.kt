@@ -10,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -20,7 +21,7 @@ import javax.inject.Inject
 class LibraryApiViewModel @Inject constructor(
     private val repo: MarvelApiRepo
 ): ViewModel() {
-    val characters: MutableStateFlow<NetworkResult<CharactersApiResponse>> = repo.characters
+    val characters: StateFlow<NetworkResult<CharactersApiResponse>> = repo.characters
     val queryText = MutableStateFlow("")
     private val queryInput = Channel<String>(Channel.CONFLATED)
 
