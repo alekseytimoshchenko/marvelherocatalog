@@ -2,13 +2,13 @@ package com.krokosha.marvelhero
 
 import android.content.Context
 import androidx.room.Room
-import androidx.room.RoomDatabase
 import com.krokosha.marvelhero.model.api.ApiService
 import com.krokosha.marvelhero.model.db.CharacterDao
 import com.krokosha.marvelhero.model.db.CollectionDb
 import com.krokosha.marvelhero.model.db.CollectionDbRepoImpl
 import com.krokosha.marvelhero.model.db.Constants
 import com.krokosha.marvelhero.model.db.ICollectionDbRepo
+import com.krokosha.marvelhero.model.db.NoteDao
 import com.krokosha.marvelhero.repos.MarvelApiRepo
 import dagger.Module
 import dagger.Provides
@@ -27,10 +27,12 @@ class HiltModule {
         Room.databaseBuilder(ctx, CollectionDb::class.java, Constants.DB).build()
 
     @Provides
-    fun provideCharacterDao(collectionDb: CollectionDb): CharacterDao =
-        collectionDb.characterDao()
+    fun provideCharacterDao(collectionDb: CollectionDb): CharacterDao = collectionDb.characterDao()
 
     @Provides
-    fun provideDbRepoImpl(characterDao: CharacterDao): ICollectionDbRepo =
-        CollectionDbRepoImpl(dao = characterDao)
+    fun provideNotesDao(collectionDb: CollectionDb): NoteDao = collectionDb.noteDao()
+
+    @Provides
+    fun provideDbRepoImpl(characterDao: CharacterDao, noteDao: NoteDao): ICollectionDbRepo =
+        CollectionDbRepoImpl(characterDao = characterDao, noteDao = noteDao)
 }
