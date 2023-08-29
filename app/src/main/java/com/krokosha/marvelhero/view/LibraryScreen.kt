@@ -1,5 +1,6 @@
 package com.krokosha.marvelhero.view
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -35,6 +36,7 @@ import androidx.navigation.NavHostController
 import com.krokosha.marvelhero.AttributionText
 import com.krokosha.marvelhero.CharacterImage
 import com.krokosha.marvelhero.Destination
+import com.krokosha.marvelhero.connectivity.ConnectivityObservable
 import com.krokosha.marvelhero.model.CharactersApiResponse
 import com.krokosha.marvelhero.model.api.NetworkResult
 import com.krokosha.marvelhero.viewmodel.LibraryApiViewModel
@@ -47,6 +49,7 @@ fun LibraryScreen(
 ) {
     val characters by vm.characters.collectAsState()
     val queryText = vm.queryText.collectAsState()
+    val networkAvailable = vm.connectivityMonitor.observe().collectAsState(ConnectivityObservable.Status.Available)
 
     Column(
         modifier = Modifier
@@ -54,6 +57,22 @@ fun LibraryScreen(
             .padding(bottom = paddingValues.calculateBottomPadding()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        if (networkAvailable.value == ConnectivityObservable.Status.Unavailable) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.Red),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    modifier = Modifier.padding(16.dp),
+                    text = "Network unavailable",
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
+            }
+        }
+
         OutlinedTextField(
             value = queryText.value,
             onValueChange = vm::onQueryUpdate,
@@ -119,7 +138,9 @@ fun ShowCharactersList(
                         .wrapContentHeight()
                         .clickable {
                             if (character.id == null) {
-                                Toast.makeText(context, "Character id is null", Toast.LENGTH_SHORT).show()
+                                Toast
+                                    .makeText(context, "Character id is null", Toast.LENGTH_SHORT)
+                                    .show()
                             } else {
                                 navController.navigate(Destination.CharacterDetail.createRoute(id))
                             }

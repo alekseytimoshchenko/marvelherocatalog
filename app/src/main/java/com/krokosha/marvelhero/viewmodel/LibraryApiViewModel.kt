@@ -3,6 +3,7 @@ package com.krokosha.marvelhero.viewmodel
 import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.krokosha.marvelhero.connectivity.ConnectivityMonitor
 import com.krokosha.marvelhero.model.CharacterResult
 import com.krokosha.marvelhero.model.CharactersApiResponse
 import com.krokosha.marvelhero.model.api.NetworkResult
@@ -21,7 +22,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LibraryApiViewModel @Inject constructor(
-    private val repo: MarvelApiRepo
+    private val repo: MarvelApiRepo,
+    val connectivityMonitor: ConnectivityMonitor
 ): ViewModel() {
     val characters: StateFlow<NetworkResult<CharactersApiResponse>> = repo.characters
     val queryText = MutableStateFlow("")

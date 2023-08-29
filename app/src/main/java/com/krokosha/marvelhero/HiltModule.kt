@@ -2,6 +2,7 @@ package com.krokosha.marvelhero
 
 import android.content.Context
 import androidx.room.Room
+import com.krokosha.marvelhero.connectivity.ConnectivityMonitor
 import com.krokosha.marvelhero.model.api.ApiService
 import com.krokosha.marvelhero.model.db.CharacterDao
 import com.krokosha.marvelhero.model.db.CollectionDb
@@ -35,4 +36,7 @@ class HiltModule {
     @Provides
     fun provideDbRepoImpl(characterDao: CharacterDao, noteDao: NoteDao): ICollectionDbRepo =
         CollectionDbRepoImpl(characterDao = characterDao, noteDao = noteDao)
+
+    @Provides
+    fun provideConnectivityManager(@ApplicationContext ctx: Context): ConnectivityMonitor = ConnectivityMonitor.getInstance(ctx)
 }
